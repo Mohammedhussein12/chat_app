@@ -1,13 +1,13 @@
-import 'package:chat_application/cubits/login_cubit/login_cubit.dart';
+import 'package:chat_application/cubits/auth_cubit/auth_cubit.dart';
 import 'package:chat_application/screens/chat_screen.dart';
 import 'package:chat_application/screens/login_screen.dart';
 import 'package:chat_application/screens/register_screen.dart';
+import 'package:chat_application/simple_bloc_observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'blocs/auth_bloc/auth_bloc.dart';
 import 'cubits/chat_cubit/chat_cubit.dart';
-import 'cubits/register_cubit/register_cubit.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -15,6 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Bloc.observer = SimpleBlocObserver();
   runApp(const ScholarChat());
 }
 
@@ -27,13 +28,13 @@ class ScholarChat extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => LoginCubit(),
-        ),
-        BlocProvider(
-          create: (context) => RegisterCubit(),
+          create: (context) => AuthCubit(),
         ),
         BlocProvider(
           create: (context) => ChatCubit(),
+        ),
+        BlocProvider(
+          create: (context) => AuthBloc(),
         ),
       ],
       child: MaterialApp(
